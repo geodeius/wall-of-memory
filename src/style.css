@@ -1,6 +1,10 @@
 :root {
+  --accent: #66023c;
+  --accent-hover: #4d022d;
+  --accent-soft: #f0e3eb;
+  --focus: #8b3670;
   font-family: "DM Sans", sans-serif;
-  color: #35413a;
+  color: #42353d;
   background: #f4f0e6;
   font-synthesis: none;
 }
@@ -37,20 +41,20 @@ button:disabled {
   cursor: default;
 }
 :focus-visible {
-  outline: 3px solid #477eac;
+  outline: 3px solid var(--focus);
   outline-offset: 4px;
 }
 button.primary {
-  background: #354c3c;
+  background: var(--accent);
   color: #fffdf5;
-  border-color: #354c3c;
+  border-color: var(--accent);
   font-size: 13px;
   font-weight: 500;
   padding: 13px 19px;
-  box-shadow: 0 3px 7px #344c3c13;
+  box-shadow: 0 3px 7px #66023c13;
 }
 button.primary:hover {
-  background: #243c2b;
+  background: var(--accent-hover);
 }
 .wall {
   position: fixed;
@@ -157,7 +161,7 @@ header button {
   display: block;
   font-size: 11px;
   font-weight: 400;
-  color: #6b7467;
+  color: #776772;
   margin-top: 7px;
 }
 .header-right {
@@ -177,7 +181,7 @@ header button {
   left: 39px;
   top: 133px;
   font-size: 11px;
-  color: #6a7465;
+  color: #766672;
   line-height: 1.6;
   pointer-events: none;
 }
@@ -186,7 +190,7 @@ header button {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #6c8962;
+  background: var(--accent);
   margin-right: 7px;
 }
 .location-sub {
@@ -219,7 +223,7 @@ header button {
   font-size: 11px;
   background: transparent;
   border: 0;
-  color: #737a68;
+  color: #796b75;
   padding: 8px;
 }
 .explore-hint {
@@ -230,7 +234,7 @@ header button {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #7a8071;
+  color: #7c7078;
   font-size: 10px;
   white-space: nowrap;
   pointer-events: none;
@@ -270,7 +274,7 @@ header button {
   background: none;
 }
 .camera-tools button:hover {
-  background: #e9e8d9;
+  background: var(--accent-soft);
 }
 .camera-tools > span {
   font-size: 10px;
@@ -289,9 +293,9 @@ header button {
   bottom: 93px;
   left: 50%;
   transform: translateX(-50%);
-  background: #354c3c;
+  background: var(--accent);
   color: #fffdf5;
-  box-shadow: 0 5px 30px #1d32292a;
+  box-shadow: 0 5px 30px #66023c2a;
   border-radius: 12px;
   padding: 14px 22px;
   font-size: 13px;
@@ -306,12 +310,12 @@ dialog {
   border: 1px solid #b3b5a24d;
   border-radius: 18px;
   background: #fffcf4;
-  color: #35413a;
-  box-shadow: 0 20px 80px #3442352b;
+  color: #42353d;
+  box-shadow: 0 20px 80px #4d022d2b;
   animation: appear 200ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 dialog::backdrop {
-  background: #34433825;
+  background: #4d022d25;
 }
 dialog form {
   display: flex;
@@ -353,6 +357,7 @@ dialog form {
   font-size: 12px;
 }
 .tabs button[aria-pressed="true"] {
+  color: var(--accent);
   background: #fffcf4;
   box-shadow: 0 1px 4px #48503c15;
 }
@@ -372,7 +377,7 @@ select {
   border-radius: 8px;
   padding: 11px;
   background: #fffef8;
-  color: #35413a;
+  color: #42353d;
   width: 100%;
   font-size: 13px;
 }
@@ -383,7 +388,7 @@ textarea {
 }
 input[type="range"] {
   padding: 0;
-  accent-color: #526d52;
+  accent-color: var(--accent);
   margin: 12px 0 3px;
 }
 .palette {
@@ -400,7 +405,7 @@ input[type="range"] {
   padding: 0;
 }
 .palette button[aria-pressed="true"] {
-  outline: 1px solid #6f7b65;
+  outline: 1px solid var(--accent);
   outline-offset: 2px;
 }
 .editor-grid {
@@ -480,7 +485,7 @@ input[type="range"] {
   padding: 25px 0;
 }
 .empty > svg {
-  color: #819274;
+  color: var(--accent);
 }
 .info-panel article {
   padding: 15px 0;
