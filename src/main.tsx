@@ -186,9 +186,6 @@ function App() {
           onClick={() => move({ x: 0, y: 0, z: 1 })}
           aria-label="The Wall, return to start"
         >
-          <span className="brand-icon">
-            <Paintbrush size={20} />
-          </span>
           <span>
             The Wall
             <span className="brand-sub">A little space for everyone.</span>
