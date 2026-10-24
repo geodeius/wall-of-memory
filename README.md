@@ -158,7 +158,34 @@ These scripts use the local development ports and `.env` configuration. Run them
 
 Browser checks cover exploration, drawing undo/redo, draft recovery after failed publishing, reload persistence, separate visitor sessions, ownership, reporting, touch pinch, and mobile overflow. Screenshots and density measurements are written to the ignored `artifacts/` directory.
 
-## Deployment
+To verify a deployed instance, run `node scripts/check-deployment.mjs https://your-app.vercel.app`. This publishes a labeled test contribution, checks reload and separate-session persistence, verifies ownership, and removes the contribution.
+
+## Deploy to Vercel
+
+The app is hosted at [wall-of-memory-one.vercel.app](https://wall-of-memory-one.vercel.app).
+
+`vercel.json` builds the Vite interface into `dist` and routes `/api` requests to an Express function through `api/index.js`. PostgreSQL connections use a small pool suited to serverless instances. Vercel serves the interface and API on the same origin.
+
+To deploy your own instance:
+
+1. Import this repository into Vercel with the Vite framework preset.
+2. Connect a PostgreSQL database through Vercel Marketplace, such as Neon. A pooled connection string is recommended. Set `DATABASE_URL` if your integration does not configure it automatically.
+3. Add distinct, randomly generated `OWNER_SECRET` and `MODERATION_TOKEN` values as sensitive server environment variables. Generate each with `openssl rand -hex 32`.
+4. Deploy. The initial database schema is applied when the API starts. Database-backed endpoints return an explicit unavailable response until storage is configured.
+5. Check `/api/health` and verify publishing and reading from separate browser sessions.
+
+On Vercel, same-origin checks use the request hostname, and the API trusts Vercel's proxy for visitor IP limits. Set `APP_ORIGIN` only if you want to restrict writes to one canonical URL. Production cookies require HTTPS.
+
+For command-line deployment:
+
+```sh
+npx vercel link
+npx vercel deploy --prod
+```
+
+Keep secrets in Vercel's environment settings. Local environment files are excluded from deployment uploads. Preview deployments require their own environment configuration; use a separate database for preview testing when appropriate.
+
+## Other hosting environments
 
 1. Provision a PostgreSQL database with backups and the TLS settings required by your host.
 2. Set `DATABASE_URL`, `OWNER_SECRET`, `MODERATION_TOKEN`, `APP_ORIGIN`, and `NODE_ENV=production` as server environment variables. Set `PORT` to your host's required listening port. `APP_ORIGIN` must match the public URL, including its scheme.
@@ -173,7 +200,7 @@ Browser checks cover exploration, drawing undo/redo, draft recovery after failed
 4. Serve the app over HTTPS. Express serves both the built interface and the API on one origin; Vite is used only for development.
 5. Check `/api/health` and verify publishing and reading from two separate browser sessions on the public URL.
 
-If you deploy behind a reverse proxy, configure trusted proxy hops for that environment before relying on per-visitor IP limits. With Express's default settings, limits apply to the proxy's address. Avoid trusting arbitrary forwarded headers.
+Outside Vercel, configure trusted reverse-proxy hops before relying on per-visitor IP limits. With Express's default settings, limits apply to the proxy's address. Avoid trusting arbitrary forwarded headers.
 
 ## Operations
 

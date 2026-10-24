@@ -11,7 +11,12 @@ import { validate } from "./validation.js";
 const app = express(),
   port = Number(process.env.PORT || 3001),
   pool = process.env.DATABASE_URL
-    ? new pg.Pool({ connectionString: process.env.DATABASE_URL })
+    ? new pg.Pool({
+        connectionString: process.env.DATABASE_URL,
+        max: 5,
+        idleTimeoutMillis: 10000,
+        connectionTimeoutMillis: 10000,
+      })
     : null;
 const secret = process.env.OWNER_SECRET;
 if (pool && !secret)
@@ -20,6 +25,7 @@ if (pool)
   await pool.query(
     await readFile(new URL("./schema.sql", import.meta.url), "utf8"),
   );
+if (process.env.VERCEL) app.set("trust proxy", 1);
 app.disable("x-powered-by");
 app.use(express.json({ limit: "256kb" }));
 app.use((req, res, next) => {
@@ -35,7 +41,7 @@ app.use("/api", (req, res, next) => {
     req.headers.origin !==
       (process.env.APP_ORIGIN ||
         (process.env.NODE_ENV === "production"
-          ? `${req.protocol}://${req.headers.host}`
+          ? `https://${req.headers.host}`
           : "http://localhost:5186"))
   )
     return res
@@ -290,8 +296,11 @@ app.use((error, req, res, next) => {
         : "The wall could not save your request. Please try again.",
   });
 });
-app.listen(port, () =>
-  console.log(
-    `Wall API listening on http://localhost:${port}; shared database ${pool ? "connected" : "not configured"}`,
-  ),
-);
+export default app;
+if (!process.env.VERCEL) {
+  app.listen(port, () =>
+    console.log(
+      `Wall API listening on http://localhost:${port}; shared database ${pool ? "connected" : "not configured"}`,
+    ),
+  );
+}
