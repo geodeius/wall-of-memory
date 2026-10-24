@@ -1345,3 +1345,124 @@ button.publish {
     box-shadow: none;
   }
 }
+
+/* Street-print finish: ink on plaster, pasted labels, and painted actions. */
+.brand {
+  position: relative;
+  isolation: isolate;
+  rotate: -2deg;
+  box-shadow: 0 5px 16px #41213316;
+  font-weight: 600;
+}
+.brand::after {
+  content: "";
+  position: absolute;
+  left: 17px;
+  top: 43px;
+  width: 108px;
+  height: 7px;
+  background: var(--accent);
+  mask: url("/assets/ink-swipe.svg") center / 100% 100% no-repeat;
+  opacity: 0.8;
+  rotate: -3deg;
+  z-index: -1;
+}
+.brand-sub {
+  margin-top: 11px;
+}
+button.primary {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+  border-radius: 16px;
+  font-weight: 600;
+}
+button.primary::before {
+  content: "";
+  position: absolute;
+  inset: -3px -6px;
+  z-index: -1;
+  background-color: var(--accent);
+  background-image: url("/assets/painted-stucco.webp");
+  background-size: 300px;
+  background-blend-mode: multiply;
+  mask: url("/assets/ink-swipe.svg") center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+button.primary.add-mark {
+  position: fixed;
+  rotate: -3deg;
+}
+.camera-tools {
+  box-shadow: 0 5px 16px #41213312;
+}
+.editor-heading {
+  position: relative;
+  isolation: isolate;
+  background: var(--accent);
+  background-image: url("/assets/painted-stucco.webp");
+  background-size: 500px;
+  background-blend-mode: multiply;
+}
+.editor-heading h2 {
+  color: var(--paper);
+  font-style: italic;
+  letter-spacing: -0.035em;
+}
+.editor-heading p {
+  color: #f0dfe9;
+}
+.editor-heading::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 9px;
+  background: var(--accent);
+  mask: url("/assets/ink-swipe.svg") center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+.preview-stage {
+  border-radius: 14px 20px 16px 22px;
+  box-shadow: inset 0 1px 8px #4b353512;
+}
+.mark-preview {
+  position: relative;
+}
+.mark-preview::after {
+  content: "";
+  position: absolute;
+  width: 48px;
+  height: 17px;
+  right: 14px;
+  top: 24px;
+  background: #e7d998bd;
+  rotate: 7deg;
+  pointer-events: none;
+}
+.ink-heading h3 {
+  font-weight: 600;
+}
+@media (hover: hover) and (pointer: fine) {
+  button.primary:not(:disabled):hover {
+    background: transparent;
+  }
+  button.primary:not(:disabled):hover::before {
+    background-color: var(--accent-hover);
+  }
+}
+@media (max-width: 600px) {
+  .brand::after {
+    top: 38px;
+    left: 14px;
+    width: 100px;
+    height: 6px;
+  }
+}
+@media (prefers-contrast: more) {
+  button.primary::before,
+  .editor-heading {
+    background-image: none;
+  }
+}

@@ -22,3 +22,10 @@ CREATE TABLE IF NOT EXISTS wall_submissions (
  created_at timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS wall_submissions_rate ON wall_submissions(visitor_hash,created_at);
+
+CREATE TABLE IF NOT EXISTS wall_auth_limits (
+ visitor_hash text PRIMARY KEY,
+ attempts integer NOT NULL,
+ expires_at timestamptz NOT NULL
+);
+CREATE INDEX IF NOT EXISTS wall_auth_limits_expiry ON wall_auth_limits(expires_at);

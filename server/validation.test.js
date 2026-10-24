@@ -64,3 +64,23 @@ test("accepts bounded strokes and rejects arbitrary drawing data", () => {
   ])
     assert.throws(() => validate({ ...m, strokes }));
 });
+test("strips nested untrusted drawing fields", () => {
+  const m = validate({
+    ...valid(),
+    kind: "drawing",
+    strokes: [
+      {
+        color: "#303a36",
+        width: 2,
+        points: [[1, 2]],
+        html: "<script/>",
+        admin: true,
+      },
+    ],
+  });
+  assert.deepEqual(Object.keys(m.strokes[0]).sort(), [
+    "color",
+    "points",
+    "width",
+  ]);
+});

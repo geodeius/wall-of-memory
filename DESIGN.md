@@ -199,3 +199,9 @@ The bottom camera cluster groups Zoom out, zoom percentage, Zoom in, and Home on
 - **Don't** replace the honest preview with unrelated art or fabricated visitor content.
 - **Don't** add looping decorative motion, sound, or confetti.
 - **Don't** animate keyboard exploration or drawing, or hide focus to make a transition smoother.
+
+### Street-print refinement
+
+The interface now borrows the wall’s paint and paper materials: Tyrian primary actions use an authored irregular ink-swipe SVG mask, the editor header layers the existing plaster texture into purple paint, and the brand has a slightly rotated pasted-label treatment with an ink underline. A translucent tape detail anchors the preview. Inter, Phosphor controls, rounded surfaces, the mural, and the bottom palette layout remain intact. These details are static; painting and navigation stay direct. Higher-contrast mode removes paint texture from primary actions and the editor header.
+
+The curated wall artwork shares this treatment: plaster-masked paint shapes and lettering, fixed spray flecks, rough ink swipes and purple paint drips. These decorations live in world coordinates and move with pan/zoom. The original central mural and visitor contributions retain their content and rendering.

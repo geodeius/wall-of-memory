@@ -26,3 +26,5 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 Motion: pointer press feedback 120ms; tray enter 220ms and exit 160ms; tab indicator 180ms; notices 180/140ms. Use cubic-bezier(.23,1,.32,1). Reduced motion uses 100–120ms opacity and immediate camera. Keyboard navigation, drag, pinch, and drawing remain direct. Home pointer transition is interruptible and preserves the current presentation value. No looping decorative artwork, sound, or confetti.
 
 Questions skipped: further product interviewing is unnecessary because the original implementation brief and the user's confirmed preservation/playfulness choices settle this surface's purpose and constraints. Chosen code-first sketches govern composition; no generated comp is promised.
+
+Street-style steer: the user requested more graffiti, paint, and street character. Amplify the interface with Tyrian painted action swipes, textured purple studio header, a pasted brand label and taped preview. Preserve mural content, Inter, Phosphor, rounded hit areas and control positions. No additional decorative motion.

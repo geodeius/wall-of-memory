@@ -214,3 +214,9 @@ Outside Vercel, configure trusted reverse-proxy hops before relying on per-visit
 - Schedule deletion of `wall_submissions` records older than 24 hours and set a retention policy for reports. Visitor hashes attached to contributions remain until those contributions are deleted.
 - Add gateway throttling or CAPTCHA if abuse requires it. For a moderation team, add individual authenticated accounts and an audit trail.
 - Test touch gestures, mobile keyboards, keyboard navigation, and screen readers on your deployed app. Profile the contribution density you expect to support.
+
+## License
+
+Licensed under the [MIT License](LICENSE). You may use, modify, distribute,
+and sell copies of this software, provided you include the copyright and license
+notices. See [LICENSE](LICENSE) for the full terms.

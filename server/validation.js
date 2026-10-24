@@ -85,6 +85,17 @@ export function validate(b) {
       "font",
       "size",
       "strokes",
-    ].map((k) => [k, k === "text" || k === "name" ? b[k].trim() : b[k]]),
+    ].map((k) => [
+      k,
+      k === "text" || k === "name"
+        ? b[k].trim()
+        : k === "strokes"
+          ? b.strokes.map((s) => ({
+              color: s.color,
+              width: s.width,
+              points: s.points.map(([x, y]) => [x, y]),
+            }))
+          : b[k],
+    ]),
   );
 }
