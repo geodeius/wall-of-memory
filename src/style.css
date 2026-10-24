@@ -3,7 +3,7 @@
   --accent-hover: #4d022d;
   --accent-soft: #f0e3eb;
   --focus: #8b3670;
-  font-family: "DM Sans", sans-serif;
+  font-family: "Inter", sans-serif;
   color: #42353d;
   background: #f4f0e6;
   font-synthesis: none;
@@ -329,7 +329,9 @@ dialog form {
   gap: 10px;
 }
 .dialog-head h2 {
-  font: 700 36px/1 Caveat;
+  font:
+    600 28px/1.2 "Inter",
+    sans-serif;
   margin: 5px 0 12px;
 }
 .dialog-head button {
@@ -384,7 +386,9 @@ select {
 textarea {
   height: 105px;
   resize: vertical;
-  font: 26px/1.2 Caveat;
+  font:
+    400 16px/1.5 "Inter",
+    sans-serif;
 }
 input[type="range"] {
   padding: 0;
