@@ -223,7 +223,8 @@ notices. See [LICENSE](LICENSE) for the full terms.
 
 ## Portfolio previews
 
-The framing policy permits this site and `http://localhost:5173` to embed the wall.
-For a published portfolio, add its exact origin (scheme and hostname, without a
+The framing policy permits this site, `http://localhost:5173`, and the live
+portfolio at `https://georgeantwi.vercel.app` to embed the wall.
+For another portfolio domain, add its exact origin (scheme and hostname, without a
 path) to `frame-ancestors` in both `server/security.js` and `vercel.json`, then
 redeploy. Keep the policies synchronized; automated tests check this.

@@ -36,7 +36,10 @@ test("production CSP restricts framing and blocks executable inline content and 
   const csp = browserHeaders["Content-Security-Policy"];
   assert.match(csp, /script-src 'self';/);
   assert.match(csp, /object-src 'none'/);
-  assert.match(csp, /frame-ancestors 'self' http:\/\/localhost:5173$/);
+  assert.match(
+    csp,
+    /frame-ancestors 'self' http:\/\/localhost:5173 https:\/\/georgeantwi\.vercel\.app$/,
+  );
   assert.equal(browserHeaders["X-Frame-Options"], undefined);
   const config = JSON.parse(
     readFileSync(new URL("../vercel.json", import.meta.url), "utf8"),

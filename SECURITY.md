@@ -4,7 +4,7 @@ Scope: source review of public publishing, browser ownership, reporting, moderat
 
 ## Findings addressed locally
 
-- Added a production Content Security Policy, restricted embedding with CSP, disabled unused camera/microphone/location permissions, and retained no-sniff/referrer protection. Framing permits the same origin and the local portfolio at `http://localhost:5173`; other origins remain blocked. Headers apply to Vercel static files as well as API responses. Inline styles remain allowed because rendering uses positioned React styles; inline scripts and external script hosts are blocked.
+- Added a production Content Security Policy, restricted embedding with CSP, disabled unused camera/microphone/location permissions, and retained no-sniff/referrer protection. Framing permits the same origin, the local portfolio at `http://localhost:5173`, and the live portfolio at `https://georgeantwi.vercel.app`; other origins remain blocked. Headers apply to Vercel static files as well as API responses. Inline styles remain allowed because rendering uses positioned React styles; inline scripts and external script hosts are blocked.
 - Added database-backed failed moderator authentication limits: 30 failures per visitor IP hash per 15 minutes. Valid credentials remain usable even after failed requests from the same IP. Expired counters are pruned. This works across serverless instances.
 - Reject cross-site browser writes using Origin and Fetch Metadata, and require JSON for POST bodies. Requests from direct API clients without browser Origin headers remain possible; this is a public API, not bot prevention.
 - Normalize nested drawing data so unknown stroke properties cannot be stored.
