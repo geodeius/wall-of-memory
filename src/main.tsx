@@ -195,11 +195,11 @@ function App() {
           <button className="about-button" onClick={() => setPanel("about")}>
             An open canvas. A shared story. <ArrowUpRight size={15} />
           </button>
-          <button className="primary" onClick={() => add()}>
-            <Plus size={18} /> Add a mark
-          </button>
         </div>
       </header>
+      <button className="primary add-mark" onClick={() => add()}>
+        <Plus size={18} /> Add a mark
+      </button>
       <div className="location">
         <span className="green-dot" />
         {online ? "A wall we make together" : "An open invitation to create"}
