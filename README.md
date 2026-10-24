@@ -1,85 +1,211 @@
 # The Wall
 
-An independent React + TypeScript + Vite community graffiti wall. The portfolio at `../New portfolio` is unchanged. Its mural and plaster assets are reused, with a new nonrepeating collection of SVG decorations. Curated art is kept in `Art.tsx`; real visitor marks live in PostgreSQL. No fabricated visitors are seeded.
+A shared community graffiti wall where anyone can leave a message, drawing, or signature. Explore an open canvas of colorful artwork, find a spot, and add something of your own.
 
-## Run locally
+The Wall is about small acts of expression and connection: a thought, a doodle, a kind reminder, or a little hello. There are no perfect lines required.
 
-Requires Node 22+ and PostgreSQL 14+.
+## Features
+
+- Explore in every direction with dragging, scrolling, touch gestures, or keyboard controls.
+- Write short messages or draw with a mouse, pen, or touch screen.
+- Choose ink colors, lettering, size, and rotation, then preview your mark before publishing.
+- Undo, redo, and clear drawing strokes.
+- Recover unfinished drafts and retry after a network error.
+- Share published marks across visitors and devices through PostgreSQL.
+- Browse nearby contributions in a list, report content, hide marks for your visit, and remove your own submissions.
+- Review reported contributions through a protected moderation queue.
+
+## Stack
+
+React, TypeScript, and Vite power the interface. An Express API handles validation, publishing, ownership, and moderation, with PostgreSQL for shared storage. Artwork and visitor marks use DOM and SVG rendering.
+
+## Local setup
+
+### Requirements
+
+- Node.js 22 or later
+- npm
+- PostgreSQL 14 or later
+
+### Install and configure
 
 ```sh
+git clone https://github.com/geodeius/wall-of-memory.git
+cd wall-of-memory
 npm install
 cp .env.example .env
-# Fill DATABASE_URL, OWNER_SECRET and MODERATION_TOKEN with your own values.
-# Generate distinct secrets: openssl rand -hex 32
+```
+
+Create a PostgreSQL database, then update `.env`:
+
+```dotenv
+DATABASE_URL=postgresql://user:password@localhost:5432/community_wall
+OWNER_SECRET=replace-with-a-random-secret
+MODERATION_TOKEN=replace-with-a-different-random-secret
+PORT=3186
+APP_ORIGIN=http://localhost:5186
+```
+
+Generate each secret separately:
+
+```sh
+openssl rand -hex 32
+```
+
+Keep `.env` private. It is excluded from Git. Server secrets must never use the `VITE_` prefix, which exposes values to the browser.
+
+### Start the app
+
+```sh
 npm run dev
 ```
 
-Open http://localhost:5186. The API runs on port 3186; Vite forwards `/api` there. Without DATABASE_URL, exploration and draft editing work, but publishing explicitly returns unavailable. Browser storage holds drafts only. A local development `.env` and isolated PostgreSQL instance on port 55432 were created during implementation; neither is a hosted service. That database uses `/tmp/community-wall-pg` and is disposable. To restart it while its files exist:
+Open [localhost:5186](http://localhost:5186). The API runs on port 3186, and Vite forwards `/api` requests to it. Keep the local API port at 3186 unless you also update the proxy in `vite.config.ts`.
+
+The API applies the initial schema automatically at startup. A configured database also requires `OWNER_SECRET`. Without a database, you can explore and prepare drafts, but publishing is unavailable. Browser storage retains drafts; published marks are stored in PostgreSQL.
+
+## Using the wall
+
+| Action                       | Control                                                                   |
+| ---------------------------- | ------------------------------------------------------------------------- |
+| Explore                      | Drag, scroll, or use the arrow keys while the wall is focused             |
+| Zoom                         | Pinch, use control-wheel, or select the zoom buttons                      |
+| Return to the starting mural | Select Back to start or press Home                                        |
+| Add a contribution           | Click a spot, select Add a mark, or press Enter while the wall is focused |
+| Close an editor or panel     | Select its close button or press Escape                                   |
+| Browse nearby contributions  | Open Wall notes                                                           |
+
+Marks use world coordinates, so their positions remain consistent across screen sizes. Add a mark selects the center of your current view. Messages provide an alternative to freehand drawing.
+
+## Community and moderation
+
+Keep contributions kind. Share your own words and drawings, and leave out hate, harassment, spam, and private information.
+
+Submissions publish immediately. Wall notes provides reporting, hiding for the current visit, and deletion of your own marks. Anonymous ownership uses an HttpOnly, SameSite cookie. Clearing that cookie removes your ability to manage earlier submissions.
+
+To review reports, open Keep it kind → Moderator access and enter the server's `MODERATION_TOKEN`. Moderators can approve a mark and clear its reports, hide it, or permanently delete it. The token remains in component memory for the current session.
+
+Server limits include:
+
+- Five new contributions per visitor IP per hour; deleting a mark does not reset the limit.
+- Messages up to 120 characters and optional names up to 30 characters.
+- Drawings up to 60 strokes, with 400 points per stroke and a 256 KB request limit.
+- Twenty reports per visitor IP per hour, deduplicated per contribution.
+
+Raw IP addresses are not stored. Rate limits use keyed hashes, and ownership tokens are stored as hashes. Rotating `OWNER_SECRET` invalidates existing ownership hashes.
+
+## Project structure
+
+| File                   | Responsibility                                                           |
+| ---------------------- | ------------------------------------------------------------------------ |
+| `src/main.tsx`         | Wall interactions, controls, contribution list, and moderation interface |
+| `src/useCamera.ts`     | Camera coordinates, transforms, panning, and zoom                        |
+| `src/useWallData.ts`   | Viewport loading, request cancellation, and region caching               |
+| `src/Art.tsx`          | Curated mural artwork and decorations                                    |
+| `src/MarkView.tsx`     | Visitor contribution rendering                                           |
+| `src/Editor.tsx`       | Messages, drawing tools, previews, and draft recovery                    |
+| `server/index.js`      | API, ownership, moderation, and rate limits                              |
+| `server/validation.js` | Server-side field and drawing validation                                 |
+| `server/schema.sql`    | Initial database schema and indexes                                      |
+
+Curated artwork is separate from visitor data. Text is rendered as text, and drawings are constructed from validated points. Contributions cannot contain arbitrary HTML or executable SVG.
+
+Viewport queries return up to 1,000 newest marks per area. The interface renders nearby marks and keeps a bounded region cache. Very dense walls need aggregation or pagination beyond this limit.
+
+## Database setup
+
+`server/schema.sql` is an idempotent initial migration. To apply it explicitly, set `DATABASE_URL` in your shell and run:
 
 ```sh
-pg_ctl -D /tmp/community-wall-pg -l /tmp/community-wall-pg.log -o '-p 55432 -h 127.0.0.1' start
+psql "$DATABASE_URL" -f server/schema.sql
 ```
 
-## Implementation
-
-- `src/useCamera.ts`: mutable camera and direct DOM transforms, frame-scheduled state, wheel panning and focal zoom.
-- `src/main.tsx`: pointer capture, drag threshold, two-pointer pinch, keyboard exploration, controls, accessible visitor list and moderation interface.
-- `src/Art.tsx`, `src/MarkView.tsx`: curated SVG/art and memoized visitor rendering. Art is placed once, not tiled into wallpaper. The plaster texture repeats beneath paint.
-- `src/Editor.tsx`: native modal focus containment/Escape, text/lettering, per-stroke drawing ink, undo/redo/clear, preview, draft recovery and retry.
-- `src/useWallData.ts`: overscanned world bounds, abortable requests, debouncing, bounded 16-region cache and visible rendering. Zoom is included in region requests. Up to 1,000 newest marks are returned per queried area; extreme density needs zoom-based aggregation or pagination before large-scale launch.
-- `server/index.js`: shared API, anonymous ownership, reports, protected moderation and rate limits.
-- `server/validation.js`: allowlisted fields, colors, dimensions and bounded point data. Text is rendered as React text; no user HTML or SVG is accepted.
-
-World origin is the center of the starting mural. Positions do not depend on device dimensions. Arrow keys pan, Home resets, Enter opens placement. Wheel pans; control-wheel/trackpad pinch zooms around the pointer. Touch supports dragging and pinch zoom. The explicit Add a mark button places at the current view center. Native dialogs trap focus; closing restores wall focus. Text is always available as an alternative to freehand input.
-
-## Database and migration
-
-`server/schema.sql` is an idempotent initial migration, applied at API startup. For controlled deployment, apply it once with `psql "$DATABASE_URL" -f server/schema.sql`, then run with a suitably restricted database account. Future schema changes should be separately versioned migrations.
-
-Marks store JSON settings, indexed world coordinates, creation time, visibility status, ownership hash and a keyed visitor hash. Curated art never goes into the visitor table. The anonymous owner receives a random HttpOnly SameSite cookie; only its HMAC is stored. Removing cookies loses ownership. Raw IPs are not stored; keyed IP hashes enforce five successful new submissions per hour. Deleting a mark does not reset that limit. Stable draft IDs make publishing retries idempotent. Drawing limits: 60 strokes, 400 points each, 280×140 point area, 1–6px width, 256KB request body. Text: 120 characters; names: 30; tilt: ±15°. Reports: 20 per hour, deduplicated per mark and visitor.
-
-Submissions publish immediately. Wall notes exposes reporting, per-visit hiding, and owner deletion. About → Moderator access opens the protected queue. Moderators supply MODERATION_TOKEN, kept only in component memory. Queue actions approve (restore/clear reports), hide, or permanently delete. The server never sends moderation secrets or ownership hashes to the browser.
-
-For a reverse proxy, keep Express's default proxy trust unless you configure trusted proxy hops for your deployment. Without that configuration, IP limits apply to the proxy as a whole. Do not blindly trust forwarded IP headers. Use HTTPS, secure production cookies, a correct APP_ORIGIN, database TLS settings required by the host, and distinct strong secrets. Add gateway request throttles/CAPTCHA when actual abuse requires them. Secret rotation invalidates existing ownership hashes. The moderator token is a simple launch foundation; use authenticated individual moderator accounts and an audit trail for a team.
+The schema contains contributions, reports, and submission rate-limit records. Use separately versioned migrations for future schema changes. Configure database access, TLS, and backups for your hosting environment.
 
 ## API
 
-| Method | Endpoint                                     | Purpose                                                            |
-| ------ | -------------------------------------------- | ------------------------------------------------------------------ |
-| GET    | `/api/health`                                | Database health                                                    |
-| GET    | `/api/marks?left=&top=&right=&bottom=&zoom=` | Visible area, newest first                                         |
-| POST   | `/api/marks`                                 | Validate and publish a mark                                        |
-| POST   | `/api/marks/:id/report`                      | Report a mark                                                      |
-| DELETE | `/api/marks/:id`                             | Remove an owned mark                                               |
-| GET    | `/api/moderation`                            | Reported marks; bearer token required                              |
-| POST   | `/api/moderation/:id`                        | `{action: "hide" \| "approve" \| "delete"}`; bearer token required |
+| Method | Endpoint                                     | Purpose                                            |
+| ------ | -------------------------------------------- | -------------------------------------------------- |
+| GET    | `/api/health`                                | Check database health                              |
+| GET    | `/api/marks?left=&top=&right=&bottom=&zoom=` | Read contributions in a viewport                   |
+| POST   | `/api/marks`                                 | Publish a validated contribution                   |
+| POST   | `/api/marks/:id/report`                      | Report a contribution                              |
+| DELETE | `/api/marks/:id`                             | Remove an owned contribution                       |
+| GET    | `/api/moderation`                            | Read reported contributions; bearer token required |
+| POST   | `/api/moderation/:id`                        | Apply a moderation action; bearer token required   |
 
-## Verification
+Moderation requests accept an `action` of `hide`, `approve`, or `delete`.
+
+## Checks
+
+Run validation tests and build the app:
 
 ```sh
 npm test
 npm run build
-node scripts/check-api.mjs       # needs the configured local API and database
-npx playwright install chromium
-node scripts/check-browser.mjs   # needs the local Vite app and API
-node scripts/check-density.mjs   # seeds/removes 1,000 test marks in your local DB
 ```
 
-The API script creates clearly labeled fixtures and removes them. Each run consumes two real rate-limit slots. Browser checks cover drag/click separation, keyboard pan/reset, zoom, failed publishing with draft recovery, publishing/reload, a second isolated mobile browser session, ownership, reports, drawing undo/redo, pinch touch events, and mobile overflow. Browser screenshots are written to ignored `artifacts/`.
+With the local app and database running, run integration and browser checks:
 
-Local database and browser verification is not proof of deployed persistence, real iOS/Android gestures, or assistive-technology compatibility. Those require testing on the deployed origin and physical devices.
+```sh
+node scripts/check-api.mjs
+npx playwright install chromium
+node scripts/check-browser.mjs
+node scripts/check-density.mjs
+```
 
-## Deploy and operate
+These scripts use the local development ports and `.env` configuration. Run them against a development database. They create and remove test contributions; the density check temporarily adds 1,000 marks. The API check consumes two submission rate-limit slots, and the browser check consumes one.
 
-1. Provision a PostgreSQL database; configure backups and TLS.
-2. Configure DATABASE_URL, OWNER_SECRET, MODERATION_TOKEN, APP_ORIGIN and NODE_ENV=production as server secrets. Do not prefix secrets with VITE_.
-3. Run `npm ci && npm run build`, then `npm start`. Set PORT for the host. Express serves the built app and API on one origin. Vite is development-only.
-4. Probe `/api/health`, monitor structured `request_failed` logs and 429/5xx rates, and routinely review the moderation queue. No external monitoring provider is wired in.
-5. Schedule deletion of `wall_submissions` older than 24 hours and old report records as appropriate to your moderation retention policy. Visitor hashes attached to published marks remain until the mark is deleted; minimize access and define a retention policy before launch.
-6. Verify two separate browsers can publish/read on the deployed URL, test mobile keyboards and touch on physical devices, review keyboard/screen-reader workflows, and profile your expected peak mark density.
+Browser checks cover exploration, drawing undo/redo, draft recovery after failed publishing, reload persistence, separate visitor sessions, ownership, reporting, touch pinch, and mobile overflow. Screenshots and density measurements are written to the ignored `artifacts/` directory.
 
-This workspace is a working local implementation. No production database, public deployment, external monitoring, or physical-device certification is claimed.
+To verify a deployed instance, run `node scripts/check-deployment.mjs https://your-app.vercel.app`. This publishes a labeled test contribution, checks reload and separate-session persistence, verifies ownership, and removes the contribution.
 
-### Recorded local verification
+## Deploy to Vercel
 
-On 24 October 2026, the production build, three server validation tests, the API integration script, and the desktop/mobile Chromium browser script passed. A 1,000-mark synthetic density check rendered 975 marks during panning, with a measured 95th-percentile frame interval of 16.8 ms and a maximum of 83.3 ms on this machine. This is a local smoke profile, not a guarantee for all hardware. Density fixtures were removed afterward.
+The app is hosted at [wall-of-memory-one.vercel.app](https://wall-of-memory-one.vercel.app).
+
+`vercel.json` builds the Vite interface into `dist` and routes `/api` requests to an Express function through `api/index.js`. PostgreSQL connections use a small pool suited to serverless instances. Vercel serves the interface and API on the same origin.
+
+To deploy your own instance:
+
+1. Import this repository into Vercel with the Vite framework preset.
+2. Connect a PostgreSQL database through Vercel Marketplace, such as Neon. A pooled connection string is recommended. Set `DATABASE_URL` if your integration does not configure it automatically.
+3. Add distinct, randomly generated `OWNER_SECRET` and `MODERATION_TOKEN` values as sensitive server environment variables. Generate each with `openssl rand -hex 32`.
+4. Deploy. The initial database schema is applied when the API starts. Database-backed endpoints return an explicit unavailable response until storage is configured.
+5. Check `/api/health` and verify publishing and reading from separate browser sessions.
+
+On Vercel, same-origin checks use the request hostname, and the API trusts Vercel's proxy for visitor IP limits. Set `APP_ORIGIN` only if you want to restrict writes to one canonical URL. Production cookies require HTTPS.
+
+For command-line deployment:
+
+```sh
+npx vercel link
+npx vercel deploy --prod
+```
+
+Keep secrets in Vercel's environment settings. Local environment files are excluded from deployment uploads. Preview deployments require their own environment configuration; use a separate database for preview testing when appropriate.
+
+## Other hosting environments
+
+1. Provision a PostgreSQL database with backups and the TLS settings required by your host.
+2. Set `DATABASE_URL`, `OWNER_SECRET`, `MODERATION_TOKEN`, `APP_ORIGIN`, and `NODE_ENV=production` as server environment variables. Set `PORT` to your host's required listening port. `APP_ORIGIN` must match the public URL, including its scheme.
+3. Build and start the app:
+
+   ```sh
+   npm ci
+   npm run build
+   npm start
+   ```
+
+4. Serve the app over HTTPS. Express serves both the built interface and the API on one origin; Vite is used only for development.
+5. Check `/api/health` and verify publishing and reading from two separate browser sessions on the public URL.
+
+Outside Vercel, configure trusted reverse-proxy hops before relying on per-visitor IP limits. With Express's default settings, limits apply to the proxy's address. Avoid trusting arbitrary forwarded headers.
+
+## Operations
+
+- Monitor `/api/health`, structured `request_failed` logs, and rates of 429 and 5xx responses.
+- Review the moderation queue regularly.
+- Schedule deletion of `wall_submissions` records older than 24 hours and set a retention policy for reports. Visitor hashes attached to contributions remain until those contributions are deleted.
+- Add gateway throttling or CAPTCHA if abuse requires it. For a moderation team, add individual authenticated accounts and an audit trail.
+- Test touch gestures, mobile keyboards, keyboard navigation, and screen readers on your deployed app. Profile the contribution density you expect to support.

@@ -153,16 +153,6 @@ header button {
   font-weight: 600;
   gap: 12px;
 }
-.brand-icon {
-  border: 1px solid #65735b50;
-  background: #f8f5e9aa;
-  border-radius: 50%;
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  transform: rotate(-15deg);
-}
 .brand-sub {
   display: block;
   font-size: 11px;
@@ -235,7 +225,7 @@ header button {
 .explore-hint {
   position: fixed;
   left: 50%;
-  bottom: 40px;
+  bottom: 92px;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
@@ -253,9 +243,15 @@ header button {
   background: #a6aa99;
   margin: 0 10px 2px;
 }
-.camera-tools {
+.add-mark {
   position: fixed;
   right: 36px;
+  bottom: 28px;
+}
+.camera-tools {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
   bottom: 28px;
   display: flex;
   align-items: center;
@@ -548,10 +544,6 @@ input[type="range"] {
   .brand-sub {
     font-size: 9px;
   }
-  .brand-icon {
-    width: 35px;
-    height: 35px;
-  }
   .primary {
     padding: 12px 14px !important;
   }
@@ -563,9 +555,12 @@ input[type="range"] {
     left: 16px;
     bottom: max(20px, env(safe-area-inset-bottom));
   }
-  .camera-tools {
+  .add-mark {
     right: 16px;
     bottom: max(20px, env(safe-area-inset-bottom));
+  }
+  .camera-tools {
+    bottom: calc(84px + env(safe-area-inset-bottom));
   }
   .camera-tools button {
     min-width: 32px;
@@ -575,7 +570,7 @@ input[type="range"] {
   }
   .explore-hint {
     font-size: 9px;
-    bottom: 85px;
+    bottom: calc(152px + env(safe-area-inset-bottom));
   }
   .explore-hint i {
     margin-left: 5px;
@@ -597,7 +592,7 @@ input[type="range"] {
     opacity: 0.8;
   }
   .toast {
-    bottom: 115px;
+    bottom: calc(178px + env(safe-area-inset-bottom));
     width: max-content;
     text-align: center;
   }
