@@ -1,4 +1,7 @@
 :root {
+  --radius-control: 14px;
+  --radius-panel: 24px;
+  --radius-pill: 999px;
   --accent: #66023c;
   --accent-hover: #4d022d;
   --accent-soft: #f0e3eb;
@@ -25,7 +28,7 @@ button {
   color: inherit;
   background: #fffcf4;
   border: 1px solid #46503a22;
-  border-radius: 9px;
+  border-radius: var(--radius-control);
   min-height: 42px;
   padding: 9px 14px;
   display: inline-flex;
@@ -45,6 +48,7 @@ button:disabled {
   outline-offset: 4px;
 }
 button.primary {
+  border-radius: var(--radius-pill);
   background: var(--accent);
   color: #fffdf5;
   border-color: var(--accent);
@@ -208,7 +212,7 @@ header button {
   gap: 15px;
 }
 .pill {
-  border-radius: 24px;
+  border-radius: var(--radius-pill);
   background: #fffcf0c9;
   font-size: 12px;
   box-shadow: 0 2px 8px #514b3610;
@@ -262,7 +266,7 @@ header button {
   gap: 3px;
   padding: 4px;
   border: 1px solid #676f5028;
-  border-radius: 12px;
+  border-radius: var(--radius-pill);
   background: #fffcf1dc;
   box-shadow: 0 3px 12px #514b360b;
 }
@@ -296,7 +300,7 @@ header button {
   background: var(--accent);
   color: #fffdf5;
   box-shadow: 0 5px 30px #66023c2a;
-  border-radius: 12px;
+  border-radius: var(--radius-pill);
   padding: 14px 22px;
   font-size: 13px;
   max-width: 90vw;
@@ -308,7 +312,7 @@ dialog {
   max-height: calc(100dvh - 32px);
   padding: 28px;
   border: 1px solid #b3b5a24d;
-  border-radius: 18px;
+  border-radius: var(--radius-panel);
   background: #fffcf4;
   color: #42353d;
   box-shadow: 0 20px 80px #4d022d2b;
@@ -348,11 +352,12 @@ dialog form {
   display: flex;
   gap: 4px;
   background: #efeee3;
-  border-radius: 9px;
+  border-radius: var(--radius-control);
   padding: 4px;
   margin: 2px 0 8px;
 }
 .tabs button {
+  border-radius: 11px;
   flex: 1;
   background: none;
   border: 0;
@@ -376,7 +381,7 @@ input,
 textarea,
 select {
   border: 1px solid #dcded0;
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   padding: 11px;
   background: #fffef8;
   color: #42353d;
@@ -439,7 +444,7 @@ input[type="range"] {
   height: 170px;
   background: #f4f0e5;
   border: 1px dashed #aeb69e;
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   touch-action: none;
   cursor: crosshair;
 }
@@ -476,7 +481,7 @@ input[type="range"] {
   font-size: 11px;
   background: #efeee1;
   padding: 12px;
-  border-radius: 7px;
+  border-radius: var(--radius-control);
 }
 .about-flower {
   font-size: 75px;
@@ -636,7 +641,7 @@ input[type="range"] {
   position: relative;
   overflow: hidden;
   border: 1px dashed #b7bea9;
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   background: #f2ecdf;
 }
 .inline-preview .mark {
