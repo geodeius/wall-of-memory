@@ -4,3 +4,7 @@
 artifacts/
 node_modules/
 .git/
+
+.impeccable/
+PRODUCT.md
+DESIGN.md

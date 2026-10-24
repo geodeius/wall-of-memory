@@ -23,6 +23,7 @@ test("accepts safe messages and strips untrusted properties", () => {
   });
   assert.equal(m.text, "<script>hello</script>");
   assert.equal(m.admin, undefined);
+  assert.equal(validate({ ...valid(), color: "#66023c" }).color, "#66023c");
 });
 test("rejects nonfinite positions, excessive text and invalid styles", () => {
   for (const patch of [
@@ -62,4 +63,24 @@ test("accepts bounded strokes and rejects arbitrary drawing data", () => {
     [{ svg: "<script/>" }],
   ])
     assert.throws(() => validate({ ...m, strokes }));
+});
+test("strips nested untrusted drawing fields", () => {
+  const m = validate({
+    ...valid(),
+    kind: "drawing",
+    strokes: [
+      {
+        color: "#303a36",
+        width: 2,
+        points: [[1, 2]],
+        html: "<script/>",
+        admin: true,
+      },
+    ],
+  });
+  assert.deepEqual(Object.keys(m.strokes[0]).sort(), [
+    "color",
+    "points",
+    "width",
+  ]);
 });

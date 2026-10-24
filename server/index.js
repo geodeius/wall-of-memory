@@ -8,6 +8,7 @@ import {
 } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { validate } from "./validation.js";
+import { browserHeaders, rejectCrossSiteWrite } from "./security.js";
 const app = express(),
   port = Number(process.env.PORT || 3001),
   pool = process.env.DATABASE_URL
@@ -27,22 +28,27 @@ if (pool)
   );
 if (process.env.VERCEL) app.set("trust proxy", 1);
 app.disable("x-powered-by");
-app.use(express.json({ limit: "256kb" }));
+
 app.use((req, res, next) => {
-  res.setHeader("X-Content-Type-Options", "nosniff");
-  res.setHeader("Referrer-Policy", "same-origin");
+  for (const [key, value] of Object.entries(browserHeaders)) {
+    if (
+      key !== "Content-Security-Policy" ||
+      process.env.NODE_ENV === "production"
+    )
+      res.setHeader(key, value);
+  }
   next();
 });
 app.use("/api", (req, res, next) => {
   res.setHeader("Cache-Control", "no-store");
   if (
-    req.method !== "GET" &&
-    req.headers.origin &&
-    req.headers.origin !==
-      (process.env.APP_ORIGIN ||
+    rejectCrossSiteWrite(
+      req,
+      process.env.APP_ORIGIN ||
         (process.env.NODE_ENV === "production"
           ? `https://${req.headers.host}`
-          : "http://localhost:5186"))
+          : "http://localhost:5186"),
+    )
   )
     return res
       .status(403)
@@ -53,6 +59,12 @@ app.use("/api", (req, res, next) => {
       .json({ error: "Shared storage is not configured yet." });
   next();
 });
+app.use("/api", (req, res, next) => {
+  if (req.method === "POST" && !req.is("application/json"))
+    return res.status(415).json({ error: "Send JSON data." });
+  next();
+});
+app.use(express.json({ limit: "256kb" }));
 const hash = (s) =>
   createHmac("sha256", secret || "development")
     .update(s)
@@ -229,16 +241,34 @@ app.delete("/api/marks/:id", async (req, res) => {
         : { error: "Mark not found or not owned by this browser." },
     );
 });
-app.use("/api/moderation", (req, res, next) => {
+app.use("/api/moderation", async (req, res, next) => {
   const expected = process.env.MODERATION_TOKEN,
     token = String(req.headers.authorization || "").replace(/^Bearer /, "");
   if (
-    !expected ||
-    Buffer.byteLength(token) !== Buffer.byteLength(expected) ||
-    !timingSafeEqual(Buffer.from(token), Buffer.from(expected))
+    expected &&
+    Buffer.byteLength(token) === Buffer.byteLength(expected) &&
+    timingSafeEqual(Buffer.from(token), Buffer.from(expected))
   )
-    return res.status(403).json({ error: "Moderator access denied." });
-  next();
+    return next();
+  // A shared counter also covers separate serverless instances.
+  const attempts = await pool.query(
+    `
+    INSERT INTO wall_auth_limits(visitor_hash, attempts, expires_at)
+    VALUES($1, 1, now() + interval '15 minutes')
+    ON CONFLICT(visitor_hash) DO UPDATE SET
+      attempts=CASE WHEN wall_auth_limits.expires_at < now() THEN 1 ELSE wall_auth_limits.attempts+1 END,
+      expires_at=CASE WHEN wall_auth_limits.expires_at < now() THEN now()+interval '15 minutes' ELSE wall_auth_limits.expires_at END
+    RETURNING attempts`,
+    [visitor(req)],
+  );
+  if (attempts.rows[0].attempts > 30) {
+    res.setHeader("Retry-After", "900");
+    return res.status(429).json({
+      error: "Moderator request limit reached. Try again in 15 minutes.",
+    });
+  }
+  await pool.query("DELETE FROM wall_auth_limits WHERE expires_at < now()");
+  return res.status(403).json({ error: "Moderator access denied." });
 });
 app.get("/api/moderation", async (req, res) => {
   const rows = await pool.query(
@@ -247,7 +277,7 @@ app.get("/api/moderation", async (req, res) => {
   res.json(rows.rows.map((r) => entry(r, null)));
 });
 app.post("/api/moderation/:id", async (req, res) => {
-  const action = req.body.action;
+  const action = req.body?.action;
   if (!["hide", "approve", "delete"].includes(action))
     return res.status(400).json({ error: "Invalid action." });
   const client = await pool.connect();

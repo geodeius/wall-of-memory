@@ -1,18 +1,23 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
-  Plus,
-  Minus,
-  Move,
-  Home,
-  ArrowUpRight,
-  List,
-  X,
-  Heart,
-  Paintbrush,
-  Flag,
-  Trash2,
-} from "lucide-react";
+  PlusIcon,
+  MinusIcon,
+  ArrowsOutCardinalIcon,
+  HouseIcon,
+  ListBulletsIcon,
+  XIcon,
+  HeartIcon,
+  PaintBrushIcon,
+  FlagIcon,
+  TrashIcon,
+  FlowerIcon,
+  InfoIcon,
+  MapPinIcon,
+} from "./icons";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
 import "@fontsource/dm-sans/400.css";
 import "@fontsource/dm-sans/500.css";
 import "@fontsource/dm-sans/600.css";
@@ -24,8 +29,21 @@ import "./style.css";
 import { MarkView } from "./MarkView";
 import { useCamera } from "./useCamera";
 import { useWallData } from "./useWallData";
+import { useModal } from "./useModal";
+import { Notice } from "./Notice";
 function App() {
-  const { wall, world, cam, camera, move, zoom, pointers, drag } = useCamera();
+  const {
+    wall,
+    world,
+    cam,
+    camera,
+    move,
+    zoom,
+    home,
+    cancelMotion,
+    pointers,
+    drag,
+  } = useCamera();
   const [preview, setPreview] = useState<Mark | null>(null);
   const [position, setPosition] = useState<{ x: number; y: number } | null>(
     null,
@@ -109,6 +127,7 @@ function App() {
         }}
         onPointerDown={(e) => {
           if (e.button !== 0) return;
+          cancelMotion();
           e.currentTarget.setPointerCapture(e.pointerId);
           if (!pointers.current.size)
             drag.current = { distance: 0, pinched: false };
@@ -173,6 +192,15 @@ function App() {
           {visible.map((m) => (
             <MarkView key={m.id} m={m} />
           ))}
+          {position && (
+            <div
+              className="placement-marker"
+              style={{ left: position.x, top: position.y }}
+              aria-hidden="true"
+            >
+              <MapPinIcon size={24} weight="fill" />
+            </div>
+          )}
           {preview && (
             <div className="preview">
               <MarkView m={preview} />
@@ -183,7 +211,7 @@ function App() {
       <header>
         <button
           className="brand"
-          onClick={() => move({ x: 0, y: 0, z: 1 })}
+          onClick={(e) => home(e.detail === 0)}
           aria-label="The Wall, return to start"
         >
           <span>
@@ -192,31 +220,56 @@ function App() {
           </span>
         </button>
         <div className="header-right">
-          <button className="about-button" onClick={() => setPanel("about")}>
-            An open canvas. A shared story. <ArrowUpRight size={15} />
+          <button
+            className="about-button"
+            aria-label="About the wall"
+            onClick={() => setPanel("about")}
+          >
+            <InfoIcon aria-hidden="true" size={20} />
+            <span>About the wall</span>
           </button>
         </div>
       </header>
       <button className="primary add-mark" onClick={() => add()}>
-        <Plus size={18} /> Add a mark
+        <PlusIcon aria-hidden="true" size={18} /> Add a mark
       </button>
-      <div className="location">
-        <span className="green-dot" />
-        {online ? "A wall we make together" : "An open invitation to create"}
-        <span className="location-sub">No perfect lines required.</span>
+      <div
+        className="location"
+        data-state={
+          online
+            ? "online"
+            : status.startsWith("Connecting")
+              ? "loading"
+              : "offline"
+        }
+      >
+        <span className="connection-dot" aria-hidden="true" />
+        <span role="status">
+          {online
+            ? "Shared wall, open to everyone"
+            : status.startsWith("Connecting")
+              ? "Connecting to the wall…"
+              : "Publishing unavailable"}
+        </span>
+        {!online && !status.startsWith("Connecting") && (
+          <button onClick={() => setReload((n) => n + 1)}>Retry</button>
+        )}
       </div>
       <div className="bottom-left">
         <button className="pill" onClick={() => setPanel("list")}>
-          <List size={17} /> Wall notes <span>{marks.length}</span>
+          <ListBulletsIcon aria-hidden="true" size={17} /> Wall notes{" "}
+          <span>{visible.length}</span>
         </button>
         <button className="text-button" onClick={() => setPanel("about")}>
-          <Heart size={14} /> Keep it kind
+          <HeartIcon aria-hidden="true" size={14} /> Keep it kind
         </button>
       </div>
       <div className="explore-hint">
-        <Move size={16} />
+        <ArrowsOutCardinalIcon aria-hidden="true" size={16} />
         <span>
-          Drag to explore <i /> Click anywhere to leave a mark
+          Drag to explore <i />
+          <span className="pointer-hint">Click</span>
+          <span className="touch-hint">Tap</span> a spot to leave a mark
         </span>
       </div>
       <nav className="camera-tools" aria-label="Wall view controls">
@@ -225,7 +278,7 @@ function App() {
           disabled={camera.z <= 0.3}
           onClick={() => zoom(1 / 1.2)}
         >
-          <Minus size={18} />
+          <MinusIcon aria-hidden="true" size={18} />
         </button>
         <span>{Math.round(camera.z * 100)}%</span>
         <button
@@ -233,29 +286,25 @@ function App() {
           disabled={camera.z >= 2}
           onClick={() => zoom(1.2)}
         >
-          <Plus size={18} />
+          <PlusIcon aria-hidden="true" size={18} />
         </button>
         <span className="divider" />
         <button
           aria-label="Back to start"
           title="Back to start"
-          onClick={() => move({ x: 0, y: 0, z: 1 })}
+          onClick={(e) => home(e.detail === 0)}
         >
-          <Home size={18} />
+          <HouseIcon aria-hidden="true" size={18} />
         </button>
       </nav>
-      {notice && (
-        <div role="status" className="toast">
-          {notice}
-        </div>
-      )}
+      <Notice text={notice} />
+
       {position && (
         <Editor
           position={position}
           onClose={() => {
             setPosition(null);
             setPreview(null);
-            wall.current?.focus();
           }}
           onPreview={setPreview}
           onPublish={async (m) => {
@@ -276,7 +325,6 @@ function App() {
         <InfoPanel
           close={() => {
             setPanel(null);
-            wall.current?.focus();
           }}
           title={
             panel === "list"
@@ -288,7 +336,9 @@ function App() {
         >
           {panel === "about" ? (
             <>
-              <div className="about-flower">✳</div>
+              <div className="about-flower">
+                <FlowerIcon size={75} aria-hidden="true" />
+              </div>
               <p>
                 A thought, a doodle, a tiny reminder. This is a place to leave
                 something good and discover what others leave behind.
@@ -325,7 +375,7 @@ function App() {
               )}
               {!visible.length && (
                 <div className="empty">
-                  <Paintbrush size={30} />
+                  <PaintBrushIcon aria-hidden="true" size={30} />
                   <h3>Room for your words.</h3>
                   <p>No visitor marks in this area yet.</p>
                   <button
@@ -382,11 +432,11 @@ function App() {
                       Hide
                     </button>
                     <button onClick={() => action(m.id, "report")}>
-                      <Flag size={14} /> Report
+                      <FlagIcon aria-hidden="true" size={14} /> Report
                     </button>
                     {m.owned && (
                       <button onClick={() => action(m.id, "delete")}>
-                        <Trash2 size={14} /> Remove
+                        <TrashIcon aria-hidden="true" size={14} /> Remove
                       </button>
                     )}
                   </div>
@@ -471,27 +521,28 @@ function InfoPanel({
   title: string;
   children: React.ReactNode;
 }) {
-  const ref = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
-    ref.current?.showModal();
-  }, []);
+  const { dialog: ref, close: dismiss } = useModal(close);
   return (
     <dialog
       className="info-panel"
       ref={ref}
       onCancel={(e) => {
         e.preventDefault();
-        close();
+        dismiss(true);
       }}
       aria-labelledby="panel-title"
     >
       <div className="dialog-head">
         <h2 id="panel-title">{title}</h2>
-        <button aria-label="Close panel" onClick={close}>
-          <X size={20} />
+        <button
+          className="icon-button"
+          aria-label="Close panel"
+          onClick={(e) => dismiss(e.detail === 0)}
+        >
+          <XIcon aria-hidden="true" size={20} />
         </button>
       </div>
-      {children}
+      <div className="panel-body">{children}</div>
     </dialog>
   );
 }

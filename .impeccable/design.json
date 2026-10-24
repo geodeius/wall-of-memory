@@ -1,0 +1,414 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-24T13:37:28.515087+00:00",
+  "title": "Design System: The Wall",
+  "extensions": {
+    "shadows": [
+      {
+        "name": "floating",
+        "value": "0 16px 64px #41213326",
+        "purpose": "Dialogs and notices."
+      },
+      {
+        "name": "placement",
+        "value": "0 4px 16px #41213318",
+        "purpose": "Chosen wall placement marker."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "purpose": "Shared motion curve."
+      },
+      {
+        "name": "press",
+        "value": "120ms",
+        "purpose": "Scale to 0.97; reduced motion uses opacity."
+      },
+      {
+        "name": "dialog-enter",
+        "value": "220ms",
+        "purpose": "Pointer entry, 16px rise and scale .985 to 1."
+      },
+      {
+        "name": "dialog-exit",
+        "value": "160ms",
+        "purpose": "Pointer exit; keyboard dismissal is immediate."
+      },
+      {
+        "name": "tab-indicator",
+        "value": "180ms",
+        "purpose": "Selected plate translation; removed for reduced motion."
+      },
+      {
+        "name": "mode-enter",
+        "value": "160ms",
+        "purpose": "5px rise; keyboard mode switches skip this."
+      },
+      {
+        "name": "notice",
+        "value": "180ms / 140ms",
+        "purpose": "Entry / exit; reduced motion uses 100ms opacity."
+      },
+      {
+        "name": "home",
+        "value": "critically damped, omega=24",
+        "purpose": "Interruptible pointer camera return; immediate for keyboard/reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact-desktop",
+        "value": "1100px"
+      },
+      {
+        "name": "sheet",
+        "value": "900px"
+      },
+      {
+        "name": "phone",
+        "value": "600px"
+      },
+      {
+        "name": "narrow-phone",
+        "value": "360px"
+      },
+      {
+        "name": "short-viewport",
+        "value": "max-height: 520px and min-width: 601px"
+      }
+    ],
+    "colorMeta": {
+      "accent": {
+        "role": "primary",
+        "displayName": "Accent",
+        "tonalRamp": [
+          "oklch(15% 0.1363 353.56)",
+          "oklch(26% 0.1363 353.56)",
+          "oklch(38% 0.1363 353.56)",
+          "oklch(49% 0.1363 353.56)",
+          "oklch(61% 0.1363 353.56)",
+          "oklch(72% 0.1363 353.56)",
+          "oklch(84% 0.1363 353.56)",
+          "oklch(95% 0.1363 353.56)"
+        ]
+      },
+      "accent-hover": {
+        "role": "primary",
+        "displayName": "Accent Hover",
+        "tonalRamp": [
+          "oklch(15% 0.1116 352.87)",
+          "oklch(26% 0.1116 352.87)",
+          "oklch(38% 0.1116 352.87)",
+          "oklch(49% 0.1116 352.87)",
+          "oklch(61% 0.1116 352.87)",
+          "oklch(72% 0.1116 352.87)",
+          "oklch(84% 0.1116 352.87)",
+          "oklch(95% 0.1116 352.87)"
+        ]
+      },
+      "accent-soft": {
+        "role": "primary",
+        "displayName": "Accent Soft",
+        "tonalRamp": [
+          "oklch(15% 0.0176 339.94)",
+          "oklch(26% 0.0176 339.94)",
+          "oklch(38% 0.0176 339.94)",
+          "oklch(49% 0.0176 339.94)",
+          "oklch(61% 0.0176 339.94)",
+          "oklch(72% 0.0176 339.94)",
+          "oklch(84% 0.0176 339.94)",
+          "oklch(95% 0.0176 339.94)"
+        ]
+      },
+      "focus": {
+        "role": "neutral",
+        "displayName": "Focus",
+        "tonalRamp": [
+          "oklch(15% 0.1348 341.89)",
+          "oklch(26% 0.1348 341.89)",
+          "oklch(38% 0.1348 341.89)",
+          "oklch(49% 0.1348 341.89)",
+          "oklch(61% 0.1348 341.89)",
+          "oklch(72% 0.1348 341.89)",
+          "oklch(84% 0.1348 341.89)",
+          "oklch(95% 0.1348 341.89)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0325 334.80)",
+          "oklch(26% 0.0325 334.80)",
+          "oklch(38% 0.0325 334.80)",
+          "oklch(49% 0.0325 334.80)",
+          "oklch(61% 0.0325 334.80)",
+          "oklch(72% 0.0325 334.80)",
+          "oklch(84% 0.0325 334.80)",
+          "oklch(95% 0.0325 334.80)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "tonalRamp": [
+          "oklch(15% 0.0262 337.33)",
+          "oklch(26% 0.0262 337.33)",
+          "oklch(38% 0.0262 337.33)",
+          "oklch(49% 0.0262 337.33)",
+          "oklch(61% 0.0262 337.33)",
+          "oklch(72% 0.0262 337.33)",
+          "oklch(84% 0.0262 337.33)",
+          "oklch(95% 0.0262 337.33)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "tonalRamp": [
+          "oklch(15% 0.0069 88.64)",
+          "oklch(26% 0.0069 88.64)",
+          "oklch(38% 0.0069 88.64)",
+          "oklch(49% 0.0069 88.64)",
+          "oklch(61% 0.0069 88.64)",
+          "oklch(72% 0.0069 88.64)",
+          "oklch(84% 0.0069 88.64)",
+          "oklch(95% 0.0069 88.64)"
+        ]
+      },
+      "paper-soft": {
+        "role": "neutral",
+        "displayName": "Paper Soft",
+        "tonalRamp": [
+          "oklch(15% 0.0069 354.80)",
+          "oklch(26% 0.0069 354.80)",
+          "oklch(38% 0.0069 354.80)",
+          "oklch(49% 0.0069 354.80)",
+          "oklch(61% 0.0069 354.80)",
+          "oklch(72% 0.0069 354.80)",
+          "oklch(84% 0.0069 354.80)",
+          "oklch(95% 0.0069 354.80)"
+        ]
+      },
+      "studio": {
+        "role": "neutral",
+        "displayName": "Studio",
+        "tonalRamp": [
+          "oklch(15% 0.0211 332.88)",
+          "oklch(26% 0.0211 332.88)",
+          "oklch(38% 0.0211 332.88)",
+          "oklch(49% 0.0211 332.88)",
+          "oklch(61% 0.0211 332.88)",
+          "oklch(72% 0.0211 332.88)",
+          "oklch(84% 0.0211 332.88)",
+          "oklch(95% 0.0211 332.88)"
+        ]
+      },
+      "field": {
+        "role": "neutral",
+        "displayName": "Field",
+        "tonalRamp": [
+          "oklch(15% 0.0060 350.80)",
+          "oklch(26% 0.0060 350.80)",
+          "oklch(38% 0.0060 350.80)",
+          "oklch(49% 0.0060 350.80)",
+          "oklch(61% 0.0060 350.80)",
+          "oklch(72% 0.0060 350.80)",
+          "oklch(84% 0.0060 350.80)",
+          "oklch(95% 0.0060 350.80)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "tonalRamp": [
+          "oklch(15% 0.0180 339.99)",
+          "oklch(26% 0.0180 339.99)",
+          "oklch(38% 0.0180 339.99)",
+          "oklch(49% 0.0180 339.99)",
+          "oklch(61% 0.0180 339.99)",
+          "oklch(72% 0.0180 339.99)",
+          "oklch(84% 0.0180 339.99)",
+          "oklch(95% 0.0180 339.99)"
+        ]
+      },
+      "charcoal-ink": {
+        "role": "secondary",
+        "displayName": "Charcoal Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0151 169.28)",
+          "oklch(26% 0.0151 169.28)",
+          "oklch(38% 0.0151 169.28)",
+          "oklch(49% 0.0151 169.28)",
+          "oklch(61% 0.0151 169.28)",
+          "oklch(72% 0.0151 169.28)",
+          "oklch(84% 0.0151 169.28)",
+          "oklch(95% 0.0151 169.28)"
+        ]
+      },
+      "rose-ink": {
+        "role": "secondary",
+        "displayName": "Rose Ink",
+        "tonalRamp": [
+          "oklch(15% 0.1523 7.02)",
+          "oklch(26% 0.1523 7.02)",
+          "oklch(38% 0.1523 7.02)",
+          "oklch(49% 0.1523 7.02)",
+          "oklch(61% 0.1523 7.02)",
+          "oklch(72% 0.1523 7.02)",
+          "oklch(84% 0.1523 7.02)",
+          "oklch(95% 0.1523 7.02)"
+        ]
+      },
+      "ocean-ink": {
+        "role": "secondary",
+        "displayName": "Ocean Ink",
+        "tonalRamp": [
+          "oklch(15% 0.1035 250.01)",
+          "oklch(26% 0.1035 250.01)",
+          "oklch(38% 0.1035 250.01)",
+          "oklch(49% 0.1035 250.01)",
+          "oklch(61% 0.1035 250.01)",
+          "oklch(72% 0.1035 250.01)",
+          "oklch(84% 0.1035 250.01)",
+          "oklch(95% 0.1035 250.01)"
+        ]
+      },
+      "leaf-ink": {
+        "role": "secondary",
+        "displayName": "Leaf Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0752 162.25)",
+          "oklch(26% 0.0752 162.25)",
+          "oklch(38% 0.0752 162.25)",
+          "oklch(49% 0.0752 162.25)",
+          "oklch(61% 0.0752 162.25)",
+          "oklch(72% 0.0752 162.25)",
+          "oklch(84% 0.0752 162.25)",
+          "oklch(95% 0.0752 162.25)"
+        ]
+      },
+      "ochre-ink": {
+        "role": "secondary",
+        "displayName": "Ochre Ink",
+        "tonalRamp": [
+          "oklch(15% 0.1234 70.72)",
+          "oklch(26% 0.1234 70.72)",
+          "oklch(38% 0.1234 70.72)",
+          "oklch(49% 0.1234 70.72)",
+          "oklch(61% 0.1234 70.72)",
+          "oklch(72% 0.1234 70.72)",
+          "oklch(84% 0.1234 70.72)",
+          "oklch(95% 0.1234 70.72)"
+        ]
+      },
+      "error": {
+        "role": "neutral",
+        "displayName": "Error",
+        "tonalRamp": [
+          "oklch(15% 0.1513 8.82)",
+          "oklch(26% 0.1513 8.82)",
+          "oklch(38% 0.1513 8.82)",
+          "oklch(49% 0.1513 8.82)",
+          "oklch(61% 0.1513 8.82)",
+          "oklch(72% 0.1513 8.82)",
+          "oklch(84% 0.1513 8.82)",
+          "oklch(95% 0.1513 8.82)"
+        ]
+      }
+    }
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Tyrian publishing and Add actions.",
+      "html": "<button class=\"ds-primary\">Publish your mark</button>",
+      "css": ".ds-primary{font-family:Inter,sans-serif;cursor:pointer;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:background-color 120ms cubic-bezier(.23,1,.32,1),scale 120ms cubic-bezier(.23,1,.32,1);background:var(--accent,#66023c);color:var(--paper,#fffdf8);border-radius:999px;padding:14px 23px;min-height:50px;font-size:14px;font-weight:600}.ds-primary:hover{background:var(--accent-hover,#4d022d)}.ds-primary:active{scale:.97}.ds-primary:focus-visible{outline:3px solid var(--focus,#8b3670);outline-offset:4px}"
+    },
+    {
+      "name": "Paper button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Secondary actions on paper.",
+      "html": "<button class=\"ds-paper\">Undo</button>",
+      "css": ".ds-paper{font-family:Inter,sans-serif;cursor:pointer;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:background-color 120ms cubic-bezier(.23,1,.32,1),scale 120ms cubic-bezier(.23,1,.32,1);background:var(--paper,#fffdf8);color:var(--ink,#42313e);border-radius:16px;padding:10px 16px;min-height:44px;font-size:13px;font-weight:500}.ds-paper:hover{background:var(--accent-soft,#f0e3eb)}.ds-paper:active{scale:.97}.ds-paper:focus-visible{outline:3px solid var(--focus,#8b3670);outline-offset:4px}"
+    },
+    {
+      "name": "Message field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Labeled multiline composition field.",
+      "html": "<label class=\"ds-label\" for=\"ds-message\">Your message</label><textarea id=\"ds-message\" class=\"ds-field\" placeholder=\"A thought, a wish, a little hello\u2026\"></textarea>",
+      "css": ".ds-label{display:block;font:500 13px/1.5 Inter,sans-serif;margin-bottom:9px;color:var(--ink,#42313e)}.ds-field{font:400 16px/1.5 Inter,sans-serif;background:var(--field,#f4eff1);color:var(--ink,#42313e);border:1px solid transparent;border-radius:16px;padding:12px 14px;max-width:100%;height:100px;caret-color:var(--accent,#66023c)}.ds-field:hover{border-color:var(--line,#d8cbd3)}.ds-field:focus-visible{outline:2px solid var(--focus,#8b3670);outline-offset:2px;border-color:var(--accent,#66023c)}"
+    },
+    {
+      "name": "Mode selector",
+      "kind": "nav",
+      "refersTo": "button-secondary",
+      "description": "Pressed-button group for the two contribution modes; snippet is a static state sample.",
+      "html": "<div class=\"ds-modes\" role=\"group\" aria-label=\"Contribution type\"><button aria-pressed=\"true\">Write something</button><button aria-pressed=\"false\">Draw / sign</button></div>",
+      "css": ".ds-modes{display:flex;padding:4px;border-radius:16px;background:#f1eaee}.ds-modes button{font-family:Inter,sans-serif;cursor:pointer;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:background-color 120ms cubic-bezier(.23,1,.32,1),scale 120ms cubic-bezier(.23,1,.32,1);flex:1;min-height:44px;border-radius:12px;background:transparent;font-size:12px;color:var(--muted,#73636e)}.ds-modes button[aria-pressed=true]{background:var(--paper,#fffdf8);color:var(--accent,#66023c);font-weight:600}.ds-modes button:hover{color:var(--accent,#66023c)}.ds-modes button:active{scale:.97}.ds-modes button:focus-visible{outline:3px solid var(--focus,#8b3670);outline-offset:4px}"
+    },
+    {
+      "name": "Selected ink",
+      "kind": "chip",
+      "refersTo": "button-secondary",
+      "description": "Circular ink target with redundant check and outline selection.",
+      "html": "<button class=\"ds-ink\" aria-label=\"Tyrian purple ink\" aria-pressed=\"true\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 256 256\" fill=\"none\" aria-hidden=\"true\"><path d=\"m40 128 56 56 120-120\" stroke=\"currentColor\" stroke-width=\"24\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></button>",
+      "css": ".ds-ink{font-family:Inter,sans-serif;cursor:pointer;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:background-color 120ms cubic-bezier(.23,1,.32,1),scale 120ms cubic-bezier(.23,1,.32,1);position:relative;isolation:isolate;width:44px;height:44px;border-radius:50%;background:transparent;color:var(--paper,#fffdf8);outline:2px solid var(--accent,#66023c);padding:0}.ds-ink:before{content:\"\";position:absolute;inset:5px;border-radius:50%;background:var(--accent,#66023c);z-index:-1}.ds-ink:hover{background:var(--accent-soft,#f0e3eb)}.ds-ink:active{scale:.97}.ds-ink:focus-visible{outline:3px solid var(--focus,#8b3670);outline-offset:4px}"
+    },
+    {
+      "name": "Studio surface",
+      "kind": "card",
+      "refersTo": "studio-panel",
+      "description": "Paper surface with a studio-plum heading band.",
+      "html": "<section class=\"ds-studio\"><h2>Make your mark.</h2><p>A little piece of you, for everyone.</p></section>",
+      "css": ".ds-studio{border-radius:28px;overflow:hidden;background:var(--paper,#fffdf8);box-shadow:var(--elevation,0 16px 64px #41213326);font-family:Inter,sans-serif}.ds-studio h2{margin:0;background:var(--studio,#eee0eb);padding:20px 28px;color:var(--accent,#66023c);font-size:28px;font-weight:600;line-height:1.15;letter-spacing:-.035em}.ds-studio p{margin:0;padding:24px 28px;color:var(--muted,#73636e);font-size:13px;line-height:1.5}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Open Studio",
+    "overview": "Open Studio pairs the original mural and warm plaster with a welcoming, expressive place to make a small contribution. Paper controls sit above the artwork; Tyrian purple gives actions a clear voice, while the plum-tinted studio header makes creation feel like a shared workbench.\n\nThe interface stays legible in Inter and leaves expressive lettering to the wall and its honest preview. Rounded forms and brief, responsive motion make controls approachable without animating the artwork or disturbing reading and drawing.",
+    "keyCharacteristics": [
+      "Warm plaster and preserved mural",
+      "Tyrian actions on paper surfaces",
+      "Inter interface with expressive wall lettering",
+      "Rounded controls and functional ink swatches",
+      "Direct manipulation with forgiving drafts"
+    ],
+    "rules": [
+      {
+        "name": "The Wall First Rule",
+        "body": "Keep the original mural and plaster visible around interface surfaces; decorative artwork belongs on the wall.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "Use Inter for interface text; use Caveat, DM Sans, or Georgia only for wall lettering and its preview.",
+        "section": "typography"
+      },
+      {
+        "name": "The Soft Lift Rule",
+        "body": "Reserve diffuse shadows for floating dialogs, notices, and the placement marker; ordinary controls rest on paper without added elevation.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do preserve the original mural and plaster texture.",
+      "Do keep Zoom and Home pinned at bottom center and Add a mark pinned at bottom right, with safe-area spacing.",
+      "Do retain the persistent publish footer while the editor body scrolls.",
+      "Do provide labeled Phosphor controls, visible focus, selected-state checks, and a text alternative to drawing.",
+      "Do preserve placement and draft content through errors and dismissal; clear the stored draft only after successful publishing."
+    ],
+    "donts": [
+      "Don't move interface lettering into decorative wall fonts.",
+      "Don't replace the honest preview with unrelated art or fabricated visitor content.",
+      "Don't add looping decorative motion, sound, or confetti.",
+      "Don't animate keyboard exploration or drawing, or hide focus to make a transition smoother."
+    ]
+  }
+}
