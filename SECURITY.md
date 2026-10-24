@@ -4,7 +4,7 @@ Scope: source review of public publishing, browser ownership, reporting, moderat
 
 ## Findings addressed locally
 
-- Added a production Content Security Policy, denied embedding in frames, disabled unused camera/microphone/location permissions, and retained no-sniff/referrer protection. Headers apply to Vercel static files as well as API responses. Inline styles remain allowed because rendering uses positioned React styles; inline scripts and external script hosts are blocked.
+- Added a production Content Security Policy, restricted embedding with CSP, disabled unused camera/microphone/location permissions, and retained no-sniff/referrer protection. Framing permits the same origin and the local portfolio at `http://localhost:5173`; other origins remain blocked. Headers apply to Vercel static files as well as API responses. Inline styles remain allowed because rendering uses positioned React styles; inline scripts and external script hosts are blocked.
 - Added database-backed failed moderator authentication limits: 30 failures per visitor IP hash per 15 minutes. Valid credentials remain usable even after failed requests from the same IP. Expired counters are pruned. This works across serverless instances.
 - Reject cross-site browser writes using Origin and Fetch Metadata, and require JSON for POST bodies. Requests from direct API clients without browser Origin headers remain possible; this is a public API, not bot prevention.
 - Normalize nested drawing data so unknown stroke properties cannot be stored.
@@ -27,7 +27,7 @@ Six automated tests; local integration probes for ownership isolation, visibilit
 
 ## Remaining limits
 
-- These fixes are not deployed yet. Read-only inspection of the public site confirmed its current homepage lacked CSP and frame-denial headers.
+- These fixes are not deployed yet. Read-only inspection of the public site confirmed its current homepage lacked CSP and framing restrictions.
 - Automatic approval intentionally permits offensive content to appear before reports are reviewed.
 - Distributed bots can bypass IP quotas; public reads and malformed requests do not have an application-wide edge rate limit. Configure provider firewall/rate limits for exposure to significant hostile traffic.
 - Moderation uses a shared bearer secret, with no individual accounts, MFA, action audit trail, or per-person revocation. Anyone holding the secret can moderate.

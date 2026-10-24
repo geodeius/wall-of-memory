@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { browserHeaders, rejectCrossSiteWrite } from "./security.js";
 test("blocks foreign browser writes including requests without Origin", () => {
   const origin = "https://wall.example";
@@ -31,10 +32,22 @@ test("blocks foreign browser writes including requests without Origin", () => {
     false,
   );
 });
-test("production CSP blocks executable inline content, framing and plugins", () => {
+test("production CSP restricts framing and blocks executable inline content and plugins", () => {
   const csp = browserHeaders["Content-Security-Policy"];
   assert.match(csp, /script-src 'self';/);
   assert.match(csp, /object-src 'none'/);
-  assert.match(csp, /frame-ancestors 'none'/);
-  assert.equal(browserHeaders["X-Frame-Options"], "DENY");
+  assert.match(csp, /frame-ancestors 'self' http:\/\/localhost:5173$/);
+  assert.equal(browserHeaders["X-Frame-Options"], undefined);
+  const config = JSON.parse(
+    readFileSync(new URL("../vercel.json", import.meta.url), "utf8"),
+  );
+  const headers = config.headers[0].headers;
+  assert.equal(
+    headers.find((h) => h.key === "Content-Security-Policy").value,
+    csp,
+  );
+  assert.equal(
+    headers.some((h) => h.key === "X-Frame-Options"),
+    false,
+  );
 });

@@ -220,3 +220,10 @@ Outside Vercel, configure trusted reverse-proxy hops before relying on per-visit
 Licensed under the [MIT License](LICENSE). You may use, modify, distribute,
 and sell copies of this software, provided you include the copyright and license
 notices. See [LICENSE](LICENSE) for the full terms.
+
+## Portfolio previews
+
+The framing policy permits this site and `http://localhost:5173` to embed the wall.
+For a published portfolio, add its exact origin (scheme and hostname, without a
+path) to `frame-ancestors` in both `server/security.js` and `vercel.json`, then
+redeploy. Keep the policies synchronized; automated tests check this.
