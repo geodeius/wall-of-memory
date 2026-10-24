@@ -1,10 +1,9 @@
 export const browserHeaders = {
   "X-Content-Type-Options": "nosniff",
   "Referrer-Policy": "same-origin",
-  "X-Frame-Options": "DENY",
   "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
   "Content-Security-Policy":
-    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",
+    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'self' http://localhost:5173 https://georgeantwi.vercel.app",
 };
 export function rejectCrossSiteWrite(req, expectedOrigin) {
   if (["GET", "HEAD", "OPTIONS"].includes(req.method)) return false;
