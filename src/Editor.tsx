@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { MarkView } from "./MarkView";
-import { X, Undo2, Redo2, Trash2, Send } from "lucide-react";
+import {
+  XIcon,
+  ArrowUUpLeftIcon,
+  ArrowUUpRightIcon,
+  TrashIcon,
+  PaperPlaneTiltIcon,
+} from "./icons";
 import { palette, path, type Mark, type Stroke } from "./types";
 export function Editor({
   position,
@@ -95,7 +101,7 @@ export function Editor({
             <h2 id="editor-title">Make your mark.</h2>
           </div>
           <button type="button" aria-label="Close editor" onClick={onClose}>
-            <X size={20} />
+            <XIcon aria-hidden="true" size={20} />
           </button>
         </div>
         <div className="tabs">
@@ -183,7 +189,7 @@ export function Editor({
                   update({ strokes: m.strokes.slice(0, -1) });
                 }}
               >
-                <Undo2 size={15} /> Undo
+                <ArrowUUpLeftIcon aria-hidden="true" size={15} /> Undo
               </button>
               <button
                 type="button"
@@ -193,7 +199,7 @@ export function Editor({
                   setRedo(redo.slice(0, -1));
                 }}
               >
-                <Redo2 size={15} /> Redo
+                <ArrowUUpRightIcon aria-hidden="true" size={15} /> Redo
               </button>
               <button
                 type="button"
@@ -202,7 +208,7 @@ export function Editor({
                   setRedo([]);
                 }}
               >
-                <Trash2 size={15} /> Clear
+                <TrashIcon aria-hidden="true" size={15} /> Clear
               </button>
             </div>
           </>
@@ -297,7 +303,7 @@ export function Editor({
             saving || (m.kind === "text" ? !m.text.trim() : !m.strokes.length)
           }
         >
-          <Send size={17} />
+          <PaperPlaneTiltIcon aria-hidden="true" size={17} />
           {saving ? "Publishing…" : "Publish your mark"}
         </button>
       </form>

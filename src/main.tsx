@@ -1,18 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
-  Plus,
-  Minus,
-  Move,
-  Home,
-  ArrowUpRight,
-  List,
-  X,
-  Heart,
-  Paintbrush,
-  Flag,
-  Trash2,
-} from "lucide-react";
+  PlusIcon,
+  MinusIcon,
+  ArrowsOutCardinalIcon,
+  HouseIcon,
+  ArrowUpRightIcon,
+  ListBulletsIcon,
+  XIcon,
+  HeartIcon,
+  PaintBrushIcon,
+  FlagIcon,
+  TrashIcon,
+  FlowerIcon,
+} from "./icons";
 import "@fontsource/dm-sans/400.css";
 import "@fontsource/dm-sans/500.css";
 import "@fontsource/dm-sans/600.css";
@@ -193,12 +194,13 @@ function App() {
         </button>
         <div className="header-right">
           <button className="about-button" onClick={() => setPanel("about")}>
-            An open canvas. A shared story. <ArrowUpRight size={15} />
+            An open canvas. A shared story.{" "}
+            <ArrowUpRightIcon aria-hidden="true" size={15} />
           </button>
         </div>
       </header>
       <button className="primary add-mark" onClick={() => add()}>
-        <Plus size={18} /> Add a mark
+        <PlusIcon aria-hidden="true" size={18} /> Add a mark
       </button>
       <div className="location">
         <span className="green-dot" />
@@ -207,14 +209,15 @@ function App() {
       </div>
       <div className="bottom-left">
         <button className="pill" onClick={() => setPanel("list")}>
-          <List size={17} /> Wall notes <span>{marks.length}</span>
+          <ListBulletsIcon aria-hidden="true" size={17} /> Wall notes{" "}
+          <span>{marks.length}</span>
         </button>
         <button className="text-button" onClick={() => setPanel("about")}>
-          <Heart size={14} /> Keep it kind
+          <HeartIcon aria-hidden="true" size={14} /> Keep it kind
         </button>
       </div>
       <div className="explore-hint">
-        <Move size={16} />
+        <ArrowsOutCardinalIcon aria-hidden="true" size={16} />
         <span>
           Drag to explore <i /> Click anywhere to leave a mark
         </span>
@@ -225,7 +228,7 @@ function App() {
           disabled={camera.z <= 0.3}
           onClick={() => zoom(1 / 1.2)}
         >
-          <Minus size={18} />
+          <MinusIcon aria-hidden="true" size={18} />
         </button>
         <span>{Math.round(camera.z * 100)}%</span>
         <button
@@ -233,7 +236,7 @@ function App() {
           disabled={camera.z >= 2}
           onClick={() => zoom(1.2)}
         >
-          <Plus size={18} />
+          <PlusIcon aria-hidden="true" size={18} />
         </button>
         <span className="divider" />
         <button
@@ -241,7 +244,7 @@ function App() {
           title="Back to start"
           onClick={() => move({ x: 0, y: 0, z: 1 })}
         >
-          <Home size={18} />
+          <HouseIcon aria-hidden="true" size={18} />
         </button>
       </nav>
       {notice && (
@@ -288,7 +291,9 @@ function App() {
         >
           {panel === "about" ? (
             <>
-              <div className="about-flower">✳</div>
+              <div className="about-flower">
+                <FlowerIcon size={75} aria-hidden="true" />
+              </div>
               <p>
                 A thought, a doodle, a tiny reminder. This is a place to leave
                 something good and discover what others leave behind.
@@ -325,7 +330,7 @@ function App() {
               )}
               {!visible.length && (
                 <div className="empty">
-                  <Paintbrush size={30} />
+                  <PaintBrushIcon aria-hidden="true" size={30} />
                   <h3>Room for your words.</h3>
                   <p>No visitor marks in this area yet.</p>
                   <button
@@ -382,11 +387,11 @@ function App() {
                       Hide
                     </button>
                     <button onClick={() => action(m.id, "report")}>
-                      <Flag size={14} /> Report
+                      <FlagIcon aria-hidden="true" size={14} /> Report
                     </button>
                     {m.owned && (
                       <button onClick={() => action(m.id, "delete")}>
-                        <Trash2 size={14} /> Remove
+                        <TrashIcon aria-hidden="true" size={14} /> Remove
                       </button>
                     )}
                   </div>
@@ -488,7 +493,7 @@ function InfoPanel({
       <div className="dialog-head">
         <h2 id="panel-title">{title}</h2>
         <button aria-label="Close panel" onClick={close}>
-          <X size={20} />
+          <XIcon aria-hidden="true" size={20} />
         </button>
       </div>
       {children}
