@@ -23,6 +23,7 @@ test("accepts safe messages and strips untrusted properties", () => {
   });
   assert.equal(m.text, "<script>hello</script>");
   assert.equal(m.admin, undefined);
+  assert.equal(validate({ ...valid(), color: "#66023c" }).color, "#66023c");
 });
 test("rejects nonfinite positions, excessive text and invalid styles", () => {
   for (const patch of [

@@ -1,4 +1,5 @@
 export const colors = new Set([
+  "#66023c",
   "#303a36",
   "#bd4867",
   "#386fa5",

@@ -14,3 +14,9 @@ export { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/csr/PaperPlaneTil
 export { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 export { TrashIcon } from "@phosphor-icons/react/dist/csr/Trash";
 export { XIcon } from "@phosphor-icons/react/dist/csr/X";
+export { MapPinIcon } from "@phosphor-icons/react/dist/csr/MapPin";
+export { PenNibIcon } from "@phosphor-icons/react/dist/csr/PenNib";
+export { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
+export { SlidersHorizontalIcon } from "@phosphor-icons/react/dist/csr/SlidersHorizontal";
+export { CheckIcon } from "@phosphor-icons/react/dist/csr/Check";
+export { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";

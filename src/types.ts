@@ -17,12 +17,14 @@ export type Mark = {
   owned?: boolean;
 };
 export const palette = [
+  ["Tyrian purple", "#66023c"],
   ["Charcoal", "#303a36"],
   ["Rose", "#bd4867"],
   ["Ocean", "#386fa5"],
   ["Leaf", "#427c61"],
   ["Ochre", "#b77a22"],
-  ["Violet", "#8055a3"],
 ];
-export const path = (p: number[][]) =>
-  p.map(([x, y], i) => `${i ? "L" : "M"}${x},${y}`).join(" ");
+export const path = (p: number[][]) => {
+  if (p.length === 1) return `M${p[0][0]},${p[0][1]}l.01,0`;
+  return p.map(([x, y], i) => `${i ? "L" : "M"}${x},${y}`).join(" ");
+};

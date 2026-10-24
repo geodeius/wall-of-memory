@@ -8,7 +8,7 @@ The Wall is about small acts of expression and connection: a thought, a doodle, 
 
 - Explore in every direction with dragging, scrolling, touch gestures, or keyboard controls.
 - Write short messages or draw with a mouse, pen, or touch screen.
-- Choose ink colors, lettering, size, and rotation, then preview your mark before publishing.
+- Compose in a bottom editing palette with a live preview for messages and drawings. Choose ink colors, and open Style your mark for lettering, size, rotation, and an optional name.
 - Undo, redo, and clear drawing strokes.
 - Recover unfinished drafts and retry after a network error.
 - Share published marks across visitors and devices through PostgreSQL.
@@ -83,7 +83,7 @@ Keep contributions kind. Share your own words and drawings, and leave out hate, 
 
 Submissions publish immediately. Wall notes provides reporting, hiding for the current visit, and deletion of your own marks. Anonymous ownership uses an HttpOnly, SameSite cookie. Clearing that cookie removes your ability to manage earlier submissions.
 
-To review reports, open Keep it kind → Moderator access and enter the server's `MODERATION_TOKEN`. Moderators can approve a mark and clear its reports, hide it, or permanently delete it. The token remains in component memory for the current session.
+To review reports, open About the wall → Moderator access and enter the server's `MODERATION_TOKEN`. Moderators can approve a mark and clear its reports, hide it, or permanently delete it. The token remains in component memory for the current session.
 
 Server limits include:
 
@@ -96,17 +96,20 @@ Raw IP addresses are not stored. Rate limits use keyed hashes, and ownership tok
 
 ## Project structure
 
-| File                   | Responsibility                                                           |
-| ---------------------- | ------------------------------------------------------------------------ |
-| `src/main.tsx`         | Wall interactions, controls, contribution list, and moderation interface |
-| `src/useCamera.ts`     | Camera coordinates, transforms, panning, and zoom                        |
-| `src/useWallData.ts`   | Viewport loading, request cancellation, and region caching               |
-| `src/Art.tsx`          | Curated mural artwork and decorations                                    |
-| `src/MarkView.tsx`     | Visitor contribution rendering                                           |
-| `src/Editor.tsx`       | Messages, drawing tools, previews, and draft recovery                    |
-| `server/index.js`      | API, ownership, moderation, and rate limits                              |
-| `server/validation.js` | Server-side field and drawing validation                                 |
-| `server/schema.sql`    | Initial database schema and indexes                                      |
+| File                   | Responsibility                                                            |
+| ---------------------- | ------------------------------------------------------------------------- |
+| `src/main.tsx`         | Wall interactions, controls, contribution list, and moderation interface  |
+| `src/useCamera.ts`     | Camera coordinates, transforms, panning, and zoom                         |
+| `src/useWallData.ts`   | Viewport loading, request cancellation, and region caching                |
+| `src/Art.tsx`          | Curated mural artwork and decorations                                     |
+| `src/MarkView.tsx`     | Visitor contribution rendering                                            |
+| `src/MarkPreview.tsx`  | Fitted live preview for text and drawings                                 |
+| `src/useModal.ts`      | Accessible modal lifecycle, focus restoration, and visual viewport sizing |
+| `src/draft.ts`         | Normalization and recovery of saved drafts                                |
+| `src/Editor.tsx`       | Messages, drawing tools, previews, and draft recovery                     |
+| `server/index.js`      | API, ownership, moderation, and rate limits                               |
+| `server/validation.js` | Server-side field and drawing validation                                  |
+| `server/schema.sql`    | Initial database schema and indexes                                       |
 
 Curated artwork is separate from visitor data. Text is rendered as text, and drawings are constructed from validated points. Contributions cannot contain arbitrary HTML or executable SVG.
 
@@ -151,6 +154,8 @@ With the local app and database running, run integration and browser checks:
 node scripts/check-api.mjs
 npx playwright install chromium
 node scripts/check-browser.mjs
+node scripts/check-studio.mjs
+node scripts/check-interaction-details.mjs
 node scripts/check-density.mjs
 ```
 

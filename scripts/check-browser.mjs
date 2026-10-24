@@ -15,7 +15,7 @@ try {
   await page.goto(url);
   await page
     .locator(".location")
-    .filter({ hasText: "A wall we make together" })
+    .filter({ hasText: "Shared wall, open to everyone" })
     .waitFor();
   const world = page.locator(".world"),
     wall = page.locator(".wall");
@@ -63,10 +63,10 @@ try {
       exact: true,
     })
     .waitFor();
-  await page.locator(".mark").filter({ hasText: text }).waitFor();
+  await page.locator(".world > .mark").filter({ hasText: text }).waitFor();
   console.log("Checking reload");
   await page.reload();
-  await page.locator(".mark").filter({ hasText: text }).waitFor();
+  await page.locator(".world > .mark").filter({ hasText: text }).waitFor();
   console.log("Checking mobile");
   const other = await browser.newContext({
     viewport: { width: 390, height: 844 },
@@ -75,7 +75,7 @@ try {
   });
   const phone = await other.newPage();
   await phone.goto(url);
-  await phone.locator(".mark").filter({ hasText: text }).waitFor();
+  await phone.locator(".world > .mark").filter({ hasText: text }).waitFor();
   assert.equal(
     await phone.evaluate(
       () => document.documentElement.scrollWidth > innerWidth,
@@ -136,7 +136,7 @@ try {
     .click();
   await page.getByRole("button", { name: "Close panel", exact: true }).click();
   await page
-    .locator(".mark")
+    .locator(".world > .mark")
     .filter({ hasText: text })
     .waitFor({ state: "detached" });
   await page.screenshot({ path: "artifacts/desktop.png" });

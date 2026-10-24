@@ -23,7 +23,7 @@ try {
   await page.goto(base);
   await page
     .locator(".location")
-    .filter({ hasText: "A wall we make together" })
+    .filter({ hasText: "Shared wall, open to everyone" })
     .waitFor();
   await page.locator(".wall").click({ position: { x: 300, y: 400 } });
   const text = "Deployment verification " + Date.now();
@@ -37,12 +37,12 @@ try {
   const response = await saved;
   assert.equal(response.status(), 201, await response.text());
   id = (await response.json()).id;
-  await page.locator(".mark").filter({ hasText: text }).waitFor();
+  await page.locator(".world > .mark").filter({ hasText: text }).waitFor();
   await page.reload();
-  await page.locator(".mark").filter({ hasText: text }).waitFor();
+  await page.locator(".world > .mark").filter({ hasText: text }).waitFor();
   const other = await reader.newPage();
   await other.goto(base);
-  await other.locator(".mark").filter({ hasText: text }).waitFor();
+  await other.locator(".world > .mark").filter({ hasText: text }).waitFor();
   const result = await reader.request.get(
     "/api/marks?left=-2400&top=-2400&right=2400&bottom=2400",
   );
